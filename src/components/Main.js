@@ -2,6 +2,7 @@ import { Component } from "react";
 import ProfilePhoto from "../images/profile-photo.png";
 
 import { api } from "../utils/constants";
+import { handleApiResponse } from "../utils/utils";
 import { Card } from "./Card";
 
 export default class Main extends Component {
@@ -18,23 +19,27 @@ export default class Main extends Component {
   }
 
   async getDataServer() {
-    const [profile, cards] = await Promise.all([
-      api.getProfileInfo(),
-      api.getInitialCards(),
-    ]);
+    try {
+      const [profile, cards] = await Promise.all([
+        api.getProfileInfo(),
+        api.getInitialCards(),
+      ]);
 
-    this.setState({
-      ...this.state,
-      cards,
-      userName: profile.name,
-      userDescription: profile.about,
-      userAvatar: profile.avatar,
-      userId: profile._id,
-    });
+      this.setState({
+        ...this.state,
+        cards,
+        userName: profile.name,
+        userDescription: profile.about,
+        userAvatar: profile.avatar,
+        userId: profile._id,
+      });
+    } catch (err) {
+      handleApiResponse(err);
+    }
   }
 
   async submitEditProfile(data) {
-    api.setUserInfo(data)
+    api.setUserInfo(data);
   }
 
   componentDidMount() {
@@ -82,14 +87,16 @@ export default class Main extends Component {
           </section>
 
           <section className="elements">
-            {this.state.cards.length > 0 ? this.state.cards.map((card) => (
-              <Card
-                key={card._id}
-                data={card}
-                profileId={this.state.userId}
-                onCardClick={this.props.onCardClick}
-              />
-            )) : "Немного подождите, пока загрузятся данные..."}
+            {this.state.cards.length > 0
+              ? this.state.cards.map((card) => (
+                  <Card
+                    key={card._id}
+                    data={card}
+                    profileId={this.state.userId}
+                    onCardClick={this.props.onCardClick}
+                  />
+                ))
+              : "Немного подождите, пока загрузятся данные..."}
           </section>
         </main>
       </>

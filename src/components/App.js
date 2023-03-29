@@ -5,7 +5,6 @@ import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import React from "react";
-import { api } from "../utils/constants";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -23,8 +22,6 @@ export default class App extends React.Component {
     this.handleAddPlaceClick = this.handleAddPlaceClick.bind(this);
     this.handleEditProfileClick = this.handleEditProfileClick.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
-
-    this.submitEditProfile = this.submitEditProfile.bind(this)
 
     this.closeAllPopups = this.closeAllPopups.bind(this);
   }
@@ -47,10 +44,6 @@ export default class App extends React.Component {
       isImagePopupOpened: true,
       selectedCard: card,
     });
-  }
-
-  onSubmitForm(data) {
-    api.setUserInfo(data)
   }
 
   closeAllPopups() {
@@ -111,10 +104,6 @@ export default class App extends React.Component {
 
             <span className="editProfile-about-error form__input-error"></span>
           </label>
-
-          <button className="popup__submit" type="submit">
-            Сохранить
-          </button>
         </PopupWithForm>
 
         <PopupWithForm
@@ -122,6 +111,7 @@ export default class App extends React.Component {
           name="add-element"
           isOpen={this.state.isAddPlacePopupOpen}
           onClose={this.closeAllPopups}
+          buttonText="Создать"
         >
           <label className="form__field" htmlFor="addPlace-name">
             <input
@@ -150,10 +140,6 @@ export default class App extends React.Component {
 
             <span className="addPlace-link-error form__input-error"></span>
           </label>
-
-          <button className="popup__submit" type="submit">
-            Создать
-          </button>
         </PopupWithForm>
 
         <PopupWithForm
@@ -174,17 +160,14 @@ export default class App extends React.Component {
 
             <span className="editProfile-avatar-error form__input-error"></span>
           </label>
-
-          <button className="popup__submit" type="submit">
-            Сохранить
-          </button>
         </PopupWithForm>
 
-        <PopupWithForm title="Вы уверены?" name="confirm">
+        <PopupWithForm
+          title="Вы уверены?"
+          name="confirm"
+          buttonText="Да"
+        >
           <input type="hidden" name="cardId" id="formConfirm_id" />
-          <button className="popup__submit" type="submit">
-            Да
-          </button>
         </PopupWithForm>
 
         <ImagePopup

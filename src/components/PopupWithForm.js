@@ -12,24 +12,25 @@ export default class PopupWithForm extends React.Component {
   }
 
   render() {
-    const classesNames = ["popup", `popup_type_${this.props.name}`];
-
-    if (this.props.isOpen) classesNames.push("popup_opened");
+    const buttonText = this.props.buttonText || "Сохранить"
 
     return (
-      <div className={classesNames.join(" ")}>
+      <div
+        className={`popup popup_type_${this.props.name} ${
+          this.props.isOpen && "popup_opened"
+        }`}
+      >
         <div className="popup__container">
           <button
             className="popup__close button-icon button-icon_type_close"
             onClick={this.props.onClose}
           ></button>
           <h2 className="popup__title">{this.props.title}</h2>
-          <form
-            className="form"
-            name={`form_${this.props.name}`}
-            noValidate
-          >
+          <form className="form" name={`form_${this.props.name}`} noValidate>
             {this.props.children}
+            <button className="popup__submit" type="submit">
+              {buttonText}
+            </button>
           </form>
         </div>
       </div>

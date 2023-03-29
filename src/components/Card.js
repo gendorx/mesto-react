@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { api } from "../utils/constants";
+import { handleApiResponse } from "../utils/utils";
 
 export class Card extends Component {
   constructor(props) {
@@ -26,20 +27,24 @@ export class Card extends Component {
   }
 
   async toogleLike() {
-    const { data } = this.props;
-    let response;
+    try {
+      const { data } = this.props;
+      let response;
 
-    if (this.state.isLiked) {
-      response = await api.removeLikeCard(data._id);
-    } else {
-      response = await api.addLikeCard(data._id);
+      if (this.state.isLiked) {
+        response = await api.removeLikeCard(data._id);
+      } else {
+        response = await api.addLikeCard(data._id);
+      }
+
+      this.setState({
+        ...this.state,
+        likesCount: response.likes.length,
+        isLiked: !this.state.isLiked,
+      });
+    } catch (err) {
+      handleApiResponse(err);
     }
-
-    this.setState({
-      ...this.state,
-      likesCount: response.likes.length,
-      isLiked: !this.state.isLiked,
-    });
   }
 
   cardClick() {
