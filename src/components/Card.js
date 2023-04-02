@@ -29,7 +29,7 @@ export class Card extends Component {
     const classNamesLikeButton = ["element__like"];
     const isMyCard = card.owner._id === this.context._id;
     const isLiked = card.likes.some(
-      (a) => a._id == this.context._id
+      (a) => a._id === this.context._id
     );
 
     if (isLiked) classNamesLikeButton.push("element__like_active");

@@ -29,7 +29,6 @@ export default class PopupWithForm extends React.Component {
           <form
             className="form"
             name={`form_${this.props.name}`}
-            noValidate
             onSubmit={this.props.onSubmit}
           >
             {this.props.children}

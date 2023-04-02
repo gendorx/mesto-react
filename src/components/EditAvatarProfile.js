@@ -20,6 +20,12 @@ export default class EditAvatarProfile extends React.Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.isOpen !== this.props.isOpen) {
+      this.inputUrl.current.value = ""
+    }
+  }
+
   render() {
     const buttonText = this.props.isLoadingData ? "Сохранение..." : "Сохранить"
 

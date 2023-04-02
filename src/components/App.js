@@ -12,21 +12,20 @@ import EditAvatarProfile from "./EditAvatarProfile";
 import AddPlacePopup from "./AddPlacePopup";
 import ConfirmPopup from "./ConfirmPopup";
 
-export default class App extends React.Component {
-  static contextType = CurrentUserContext;
-  popupsClosedAll = {
-    isEditProfilePopupOpen: false,
-    isAddPlacePopupOpen: false,
-    isEditAvatarPopupOpen: false,
-    isImagePopupOpened: false,
-    isConfirmPopup: false,
-  };
+const popupsClosedAll = {
+  isEditProfilePopupOpen: false,
+  isAddPlacePopupOpen: false,
+  isEditAvatarPopupOpen: false,
+  isImagePopupOpened: false,
+  isConfirmPopup: false,
+};
 
+export default class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      ...this.popupsClosedAll,
+      ...popupsClosedAll,
       isLoadingData: false,
       selectedCard: {},
       currentUser: {},
@@ -74,7 +73,7 @@ export default class App extends React.Component {
 
   async handleUpdateUser(info) {
     this.renderLoading(true);
-    const newState = { isLoadingData: false, ...this.popupsClosedAll };
+    const newState = { isLoadingData: false, ...popupsClosedAll };
 
     try {
       newState.currentUser = await api.setUserInfo(info);
@@ -87,7 +86,7 @@ export default class App extends React.Component {
 
   async handleUpdateAvatar({ avatar }) {
     this.renderLoading(true);
-    const newState = { isLoadingData: false, ...this.popupsClosedAll };
+    const newState = { isLoadingData: false, ...popupsClosedAll };
 
     try {
       newState.currentUser = await api.setProfilePhoto(avatar);
@@ -100,7 +99,7 @@ export default class App extends React.Component {
 
   async handleAddPlaceSubmit(item) {
     this.renderLoading(true);
-    const newState = { isLoadingData: false, ...this.popupsClosedAll };
+    const newState = { isLoadingData: false, ...popupsClosedAll };
 
     try {
       newState.cards = [await api.addCard(item), ...this.state.cards];
@@ -165,7 +164,7 @@ export default class App extends React.Component {
   closeAllPopups() {
     this.setState({
       ...this.state,
-      ...this.popupsClosedAll,
+      ...popupsClosedAll,
     });
   }
 
@@ -176,7 +175,7 @@ export default class App extends React.Component {
         api.getInitialCards(),
       ]);
 
-      this.setState({ ...this.state, currentUser: userData, cards });
+      this.setNewState({ currentUser: userData, cards });
     } catch (err) {
       handleApiResponse(err);
     }

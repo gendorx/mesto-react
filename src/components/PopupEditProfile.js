@@ -30,17 +30,17 @@ export default class EditProfilePopup extends React.Component {
     this.setState({ ...this.state, [e.target.name]: e.target.value });
   }
 
-  componentDidUpdate() {
-    if (!this.context || this.state.name) return;
-
-    this.setState({
-      name: this.context.name,
-      about: this.context.about,
-    });
+  componentDidUpdate(prevProps) {
+    if (prevProps.isOpen !== this.props.isOpen) {
+      this.setState({
+        name: this.context.name,
+        about: this.context.about,
+      });
+    }
   }
 
   render() {
-    const buttonText = this.props.isLoadingData ? "Сохранение..." : "Сохранить"
+    const buttonText = this.props.isLoadingData ? "Сохранение..." : "Сохранить";
 
     return (
       <PopupWithForm
