@@ -1,4 +1,4 @@
-export default function Footer() {
+const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -6,4 +6,6 @@ export default function Footer() {
       <p className="footer__copyright">© {currentYear} Mesto Russia</p>
     </footer>
   );
-}
+};
+
+export default Footer;

@@ -1,89 +1,62 @@
 import { Component } from "react";
-import { api } from "../utils/constants";
-import { handleApiResponse } from "../utils/utils";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 export class Card extends Component {
+  static contextType = CurrentUserContext;
+
   constructor(props) {
     super(props);
 
-    this.state = {
-      cardRemoved: false,
-      likesCount: this.props.data.likes.length,
-      isLiked: this.props.data.likes.some(
-        (a) => a._id === this.props.profileId
-      ),
-    };
-
-    this.deleteCard = this.deleteCard.bind(this);
     this.cardClick = this.cardClick.bind(this);
-    this.toogleLike = this.toogleLike.bind(this);
+    this.handleCardLike = this.handleCardLike.bind(this);
+    this.handleCardDelete = this.handleCardDelete.bind(this);
   }
 
-  deleteCard() {
-    this.setState({
-      ...this.state,
-      cardRemoved: true,
-    });
+  handleCardLike() {
+    this.props.onCardLike(this.props.card);
   }
 
-  async toogleLike() {
-    try {
-      const { data } = this.props;
-      let response;
-
-      if (this.state.isLiked) {
-        response = await api.removeLikeCard(data._id);
-      } else {
-        response = await api.addLikeCard(data._id);
-      }
-
-      this.setState({
-        ...this.state,
-        likesCount: response.likes.length,
-        isLiked: !this.state.isLiked,
-      });
-    } catch (err) {
-      handleApiResponse(err);
-    }
+  handleCardDelete() {
+    this.props.onCardDelete(this.props.card);
   }
 
   cardClick() {
-    this.props.onCardClick(this.props.data);
+    this.props.onCardClick(this.props.card);
   }
 
   render() {
-    if (this.state.cardRemoved) return;
-
-    const { data } = this.props;
+    const { card } = this.props;
     const classNamesLikeButton = ["element__like"];
+    const isMyCard = card.owner._id === this.context._id;
+    const isLiked = card.likes.some(
+      (a) => a._id == this.context._id
+    );
 
-    if (this.state.isLiked) classNamesLikeButton.push("element__like_active");
+    if (isLiked) classNamesLikeButton.push("element__like_active");
 
     return (
       <article className="element">
-        {data.owner._id === this.props.profileId && (
+        {isMyCard && (
           <button
-            onClick={this.deleteCard}
+            onClick={this.handleCardDelete}
             className="element__delete button-icon button-icon_type_delete"
           ></button>
         )}
         <img
-          src={data.link}
-          alt={data.name}
+          src={card.link}
+          alt={card.name}
           className="element__image"
           onClick={this.cardClick}
         />
         <div className="element__group">
-          <h2 className="element__title">{data.name}</h2>
+          <h2 className="element__title">{card.name}</h2>
           <div className="element__like-group">
             <button
               type="button"
               className={classNamesLikeButton.join(" ")}
-              onClick={this.toogleLike}
+              onClick={this.handleCardLike}
             ></button>
-            <span className="element__likes-count">
-              {this.state.likesCount}
-            </span>
+            <span className="element__likes-count">{card.likes.length}</span>
           </div>
         </div>
       </article>

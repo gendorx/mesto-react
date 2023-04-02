@@ -12,7 +12,7 @@ export default class PopupWithForm extends React.Component {
   }
 
   render() {
-    const buttonText = this.props.buttonText || "Сохранить"
+    const buttonText = this.props.buttonText || "Сохранить";
 
     return (
       <div
@@ -26,9 +26,20 @@ export default class PopupWithForm extends React.Component {
             onClick={this.props.onClose}
           ></button>
           <h2 className="popup__title">{this.props.title}</h2>
-          <form className="form" name={`form_${this.props.name}`} noValidate>
+          <form
+            className="form"
+            name={`form_${this.props.name}`}
+            noValidate
+            onSubmit={this.props.onSubmit}
+          >
             {this.props.children}
-            <button className="popup__submit" type="submit">
+            <button
+              className={`popup__submit ${
+                this.props.isLoadingData && "popup__submit_disabled"
+              }`}
+              type="submit"
+              disabled={this.props.isLoadingData}
+            >
               {buttonText}
             </button>
           </form>
